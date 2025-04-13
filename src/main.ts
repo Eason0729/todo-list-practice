@@ -1,92 +1,41 @@
-interface Entry {
-  name: string;
-  finished: boolean;
-}
+import Project from "./project";
 
-class Entries {
-  entries: Entry[] = [];
+function renderProjects() {
+  const ul = globalThis.document.getElementById("projects")!;
 
-  constructor() {
-    this.entries = JSON.parse(localStorage.getItem("entries") || "[]");
-  }
-  saveEntries() {
-    localStorage.setItem("entries", JSON.stringify(this.entries));
-  }
-  addEntry(entry: Entry) {
-    this.entries.push(entry);
-    this.saveEntries();
-  }
-  deleteEntry(index: number) {
-    this.entries.splice(index, 1);
-    this.saveEntries();
-  }
-  displayEntries() {
-    const loading = document.getElementById("loading")!;
-    loading.classList.add("hidden");
+  for (const projectName of Object.keys(localStorage)) {
+    const li = document.createElement("li");
+    li.className = "bg-blue-100 p-4 rounded-lg shadow-md cursor-pointer";
+    li.innerHTML =
+      `<h2 class="text-xl font-bold text-blue-500">${projectName}</h2>`;
 
-    const ul = document.getElementById("entries")!;
-    ul.innerHTML = "";
+    ul.appendChild(li);
 
-    this.entries.forEach((entry) => {
-      const li = document.createElement("li");
-      li.className = "flex items-center justify-between";
-      li.innerHTML = `
-        <div>${entry.name}</div>
-        <div>
-          <button class="bg-blue-500 text-white px-4 py-1 rounded" id="switch-finish">
-            ${entry.finished ? "Unfinish" : "Finish"}
-          </button>
-          <button class="bg-red-500 text-white px-4 py-1 rounded" id="delete-entry">
-            Delete
-          </button>
-        </div>
-      `;
-      ul.appendChild(li);
-    });
-    const deleteButtons = document.querySelectorAll("#delete-entry");
-    const finishButtons = document.querySelectorAll("#switch-finish");
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", deleteEntry);
-    });
-    finishButtons.forEach((button) => {
-      button.addEventListener("click", switchFinish);
+    const project = new Project(projectName);
+    li.addEventListener("click", () => {
+      (globalThis.document.getElementById("todo-input") as HTMLInputElement)
+        .disabled = false;
+      (globalThis.document.getElementById("todo-action") as HTMLInputElement)
+        .disabled = false;
+
+      project.render();
     });
   }
 }
 
-function switchFinish(event: Event) {
-  const target = event.target as HTMLButtonElement;
-  const li = target.closest("li");
-  if (li) {
-    const index = Array.from(li.parentNode!.children).indexOf(li);
-    entries.entries[index].finished = !entries.entries[index].finished;
-    entries.saveEntries();
-    entries.displayEntries();
-  }
-}
+renderProjects();
 
-function deleteEntry(event: Event) {
-  const target = event.target as HTMLButtonElement;
-  const li = target.closest("li");
-  if (li) {
-    const index = Array.from(li.parentNode!.children).indexOf(li);
-    entries.deleteEntry(index);
-    entries.displayEntries();
-  }
-}
-
-var entries = new Entries();
-entries.displayEntries();
-
-globalThis.document.getElementById("add-action")?.addEventListener(
+globalThis.document.getElementById("project-action")!.addEventListener(
   "click",
   () => {
-    const input = document.getElementById("add-input") as HTMLInputElement;
-    const name = input.value.trim();
-    if (name) {
-      entries.addEntry({ name, finished: false });
-      input.value = "";
-      entries.displayEntries();
+    const projectName =
+      (globalThis.document.getElementById("project-input") as HTMLInputElement)
+        .value;
+    if (projectName) {
+      localStorage.setItem(projectName, JSON.stringify([]));
+      renderProjects();
+      (globalThis.document.getElementById("project-input") as HTMLInputElement)
+        .value = "";
     }
   },
 );
