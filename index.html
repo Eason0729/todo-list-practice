@@ -8,34 +8,61 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body>
-    <div
-      class="max-w-xl h-[calc(100vh-16px)] my-2 p-4 mx-auto shadow-lg rounded-lg bg-white text-lg flex flex-col"
-    >
-      <h1 class="text-3xl font-bold text-blue-500 mb-4 flex justify-center">
-        TODO list
-      </h1>
+    <div class="mx-auto grid grid-cols-3 p-4">
       <div
-        id="loading"
-        class="w-full h-[70vh] flex flex-col items-center justify-center"
+        class="col-span-3 lg:col-span-1 lg:h-[calc(100vh-32px)] p-4 border-r border-gray-300 flex flex-col"
       >
-        <img src="./loading.svg" class="w-16 h-16 mx-auto animate-spin" />
-      </div>
-      <ul id="entries" class="space-y-4 my-4 py-1"></ul>
-      <div class="mt-auto border-t border-gray-300 pt-2">
-        <input
-          id="add-input"
-          type="text"
-          class="w-full p-3 border border-gray-300 rounded-lg"
-          placeholder="Add a new task..."
-        />
-        <button
-          id="add-action"
-          class="mt-2 w-full p-2 bg-blue-500 text-white rounded-lg"
+        <ul
+          id="projects"
+          class="space-y-4 my-4 py-1 h-full overflow-y-auto"
         >
-          Add Task
-        </button>
+        </ul>
+        <div class="mt-auto border-t border-gray-300 pt-2 text-lg">
+          <input
+            id="project-input"
+            type="text"
+            class="w-full p-3 border border-gray-300 rounded-lg"
+            placeholder="Add a new project..."
+          />
+          <button
+            id="project-action"
+            class="mt-2 w-full p-2 bg-blue-500 text-white rounded-lg"
+          >
+            Add Project
+          </button>
+        </div>
+      </div>
+
+      <div class="col-span-3 lg:col-span-2 p-4 text-lg flex flex-col">
+        <h1 class="text-3xl font-bold text-blue-500 mb-4 flex justify-center">
+          TODO list
+        </h1>
+        <div
+          id="loading"
+          class="w-full h-[70vh] flex flex-col items-center justify-center"
+        >
+          <img src="./loading.svg" class="w-16 h-16 mx-auto animate-spin" />
+        </div>
+        <ul id="todos" class="space-y-4 my-4 py-1"></ul>
+        <div class="mt-auto border-t border-gray-300 pt-2">
+          <input
+            id="todo-input"
+            type="text"
+            class="w-full p-3 border border-gray-300 rounded-lg"
+            placeholder="Add a new task..."
+            disabled
+          />
+          <button
+            id="todo-action"
+            class="mt-2 w-full p-2 bg-blue-500 text-white rounded-lg disabled:bg-blue-200"
+            disabled
+          >
+            Add Task
+          </button>
+        </div>
       </div>
     </div>
+
     <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
